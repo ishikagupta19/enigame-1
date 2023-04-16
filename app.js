@@ -15,12 +15,13 @@ app.use(express.json());
 //we are linking the router files to make our route easy
 app.use(require('./router/auth'));
 
-//static files
-app.use(express.static(path.join(__dirname, './client/build')))
-
-app.get('*', function(req,res){
-    res.sendFile(path.join(__dirname, "./client/build/index.html"));
-});
+// /static files
+if (process.env.NODE_ENV=== 'production') {
+    app.use(express.static('client/build'));
+    app.get('*',(req,res) => {
+        res.sendFile(path.join(__dirname , 'client' , 'build' , 'index.html'))
+    })
+}
 
 const PORT = process.env.PORT || 5000;
 
